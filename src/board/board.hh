@@ -1,6 +1,7 @@
 #ifndef BOARD_HH_
 # define BOARD_HH_
 
+# include <iostream>
 # include <stack>
 # include <vector>
 
@@ -11,6 +12,9 @@ class Board {
 public:
     Board(void);
     ~Board(void);
+
+    std::ostream &print(std::ostream& out);
+
 
     /* Getter and setters */
     std::vector<Brigand *> getDeck(void) { return this->deck; };

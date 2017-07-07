@@ -1,6 +1,7 @@
 #ifndef PLAYER_HH_
 # define PLAYER_HH_
 
+# include <iostream>
 # include <vector>
 
 # include "card/brigand.hh"
@@ -11,6 +12,9 @@ public:
     Player(void);
     ~Player(void);
 
+    std::ostream &print(std::ostream& out);
+
+
     /* Getter and setters */
     Brigand * getDefenseFarm(void) { return this->defense_farm; };
     void setDefenseFarm(Brigand * defense_farm) { this->defense_farm = defense_farm; };
@@ -18,6 +22,7 @@ public:
     // void setTokens(std::vector<Talent *> tokens) { this->tokens = tokens; };
     Samurai * getSamurai(void) { return this->samurai; };
     void setSamurai(Samurai * samurai) { this->samurai = samurai; };
+    void addOnBattleTrack(Brigand *brigand) { this->battle_track.push_back(brigand); };
     std::vector<Brigand *> getBattleTrack(void) { return this->battle_track; };
     void setBattleTrack(std::vector<Brigand *> battle_track) { this->battle_track = battle_track; };
     Brigand * getDefenseFamily(void) { return this->defense_family; };
@@ -25,7 +30,10 @@ public:
     Brigand * getDefenseHat(void) { return this->defense_hat; };
     void setDefenseHat(Brigand * defense_hat) { this->defense_hat = defense_hat; };
 
-private:
+protected:
+    int getCurrentTrack(void);
+
+protected:
     Brigand * defense_farm;
     // std::vector<Talent *> tokens;
     Samurai * samurai;
