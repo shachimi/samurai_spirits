@@ -40,10 +40,136 @@ void Game::init_game(int nb_players)
         player->setSamurai(samurai);
         this->players.push_back(player);
     }
+    this->current_player = 0;
 
     board->init_board(nb_players);
     this->board = board;
+
+    this->round = 1;
 }
+
+bool Game::play_round(void)
+{
+    while (this->play_turn() && this->board->getDeck().size()) {
+    }
+    return true;
+}
+
+bool Game::play_turn(void)
+{
+    unsigned int start_idx;
+    Player *player;
+
+    start_idx = this->current_player % this->players.size();
+    do {
+        player = this->players[this->current_player++ % this->players.size()];
+        if (player->getCurrentTrack() <= player->getSamurai()->getBattleGauge()
+        &&  !player->hasPassed())
+        {
+            this->play_player_turn(player);
+            return true;
+        }
+    } while (start_idx != this->current_player % this->players.size());
+    return false;
+}
+
+void Game::play_player_turn(Player *player)
+{
+    turn_action_t action;
+
+    /* TODO: apply_penalty */
+
+    /* choose action to do */
+    action = player->chooseTurnAction();
+
+    switch (action) {
+      case TURN_ACTION_PASS:
+        player->setHasPassed(true);
+        break;
+
+      case TURN_ACTION_FIGHT: {
+        raider_reaction_t reaction;
+        Brigand *brigand = this->board->draw();
+
+        brigand->print(std::cout);
+        /* filter if defend possible for player */
+        reaction = player->chooseReaction(brigand);
+        switch (reaction) {
+          case REACTION_FIGHT:
+            player->addOnBattleTrack(brigand);
+            /* TODO: check for power and battle gauge */
+            break;
+          case REACTION_DEFEND:
+            player->putInDef(brigand);
+            break;
+          /* case REACTION_SKILL: */
+          /*   break; */
+        }
+      } break;
+    }
+}
+
+bool Game::resolve_round_end(void)
+{
+    this->board->forward_raiders_to_intruders();
+
+    /* blessure */
+    for (unsigned int i = 0; i < this->players.size(); i++) {
+        Player *player = this->players[i];
+
+        if (!player->getDefenseHat()) {
+            bool is_alive = player->woundSamurai();
+
+            if (!is_alive) {
+                std::cout << "dead" << std::endl;
+                return false;
+            }
+        } else {
+            this->board->addToDeck(player->getDefenseHat());
+            player->setDefenseHat(NULL);
+        }
+
+        if (!player->getDefenseFarm()) {
+            bool has_still_farm = this->board->burn();
+
+            if (!has_still_farm) {
+                std::cout << "farm burn" << std::endl;
+                return false;
+            }
+        } else {
+            this->board->addToDeck(player->getDefenseFarm());
+            player->setDefenseFarm(NULL);
+        }
+
+        if (!player->getDefenseFamily()) {
+            bool has_still_family = this->board->kill_family();
+
+            if (!has_still_family) {
+                std::cout << "family dead" << std::endl;
+                return false;
+            }
+        } else {
+            this->board->addToDeck(player->getDefenseFamily());
+            player->setDefenseFamily(NULL);
+        }
+
+        while (player->getBattleTrack()->size()) {
+            this->board->addToDeck(player->getBattleTrack()->back());
+            player->getBattleTrack()->pop_back();
+        }
+    }
+
+    if (!this->board->intruders_burn_the_village()) {
+        std::cout << "intruder burn them all" << std::endl;
+        return false;
+    }
+    this->board->restore_graveyard_to_deck();
+
+    /* TODO: add brigand depending of round */
+    this->round++;
+    return true;
+}
+
 
 /* }}} */
 /* {{{ Utils */

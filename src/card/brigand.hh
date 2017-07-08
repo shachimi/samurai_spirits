@@ -16,6 +16,8 @@ public:
     Brigand(void);
     ~Brigand(void);
 
+    std::ostream &print(std::ostream &out);
+
     /* Getter and setters */
     defense_kind_t getSymbol(void) const { return this->symbol; };
     void setSymbol(defense_kind_t symbol) { this->symbol = symbol; };

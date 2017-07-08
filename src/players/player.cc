@@ -6,7 +6,8 @@ Player::Player(void)
     : samurai(NULL),
       defense_hat(NULL),
       defense_farm(NULL),
-      defense_family(NULL)
+      defense_family(NULL),
+      has_passed(false)
 {
 }
 
@@ -26,10 +27,60 @@ int Player::getCurrentTrack(void)
     return track_value;
 }
 
+turn_action_t Player::chooseTurnAction(void/*turn_action_t available_actions[]*/)
+{
+    return TURN_ACTION_FIGHT;
+}
+
+raider_reaction_t Player::chooseReaction(Brigand *brigand/*turn_action_t available_actions[]*/)
+{
+    if (this->canDefend(brigand)) {
+        return REACTION_DEFEND;
+    }
+
+    return REACTION_FIGHT;
+}
+
+bool Player::canDefend(Brigand *brigand)
+{
+    return brigand->getSymbol() != DEFENSE_KIND_NONE
+        && ((brigand->getSymbol() == DEFENSE_KIND_HAT && !this->defense_hat)
+        ||  (brigand->getSymbol() == DEFENSE_KIND_FARM && !this->defense_farm)
+        ||  (brigand->getSymbol() == DEFENSE_KIND_FAMILY && !this->defense_family));
+}
+
+void Player::putInDef(Brigand *brigand)
+{
+    if (brigand->getSymbol() == DEFENSE_KIND_HAT) {
+        this->defense_hat = brigand;
+    }
+    if (brigand->getSymbol() == DEFENSE_KIND_FARM) {
+        this->defense_farm = brigand;
+    }
+    if (brigand->getSymbol() == DEFENSE_KIND_FAMILY) {
+        this->defense_family = brigand;
+    }
+}
+
+bool Player::woundSamurai(void)
+{
+    if (this->wound) {
+        if (!this->samurai->getUnleashMode()) {
+            return false;
+        }
+        this->wound = false;
+        this->samurai = this->samurai->getUnleashMode();
+    } else {
+        this->wound = true;
+    }
+    return true;
+}
+
 std::ostream &Player::print(std::ostream &out)
 {
-    out << "Samurai - " << this->getCurrentTrack() << "/"
-        << this->samurai->getBattleGauge() << std::endl
+    out << "Samurai (" << (this->wound ? "Wounded" : "Ok") << ")- "
+        << this->getCurrentTrack() << "/" << this->samurai->getBattleGauge()
+        << "  " << (this->has_passed ? "Paused" : "Active") << std::endl
         << (this->defense_hat    ? "v" : " ") << "H   " << std::endl
         << (this->defense_farm   ? "v" : " ") << "F   " << std::endl
         << (this->defense_family ? "v" : " ") << "f   " << std::endl;

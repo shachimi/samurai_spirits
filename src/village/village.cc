@@ -16,3 +16,21 @@ std::ostream &Village::print(std::ostream &out)
 
     return out;
 }
+
+bool Village::burn(void)
+{
+    if (this->barricades > 0) {
+        this->barricades--;
+        return true;
+    }
+    this->farms.pop_back();
+
+    return this->farms.size();
+}
+
+bool Village::kill_family(void)
+{
+    this->families.pop_back();
+
+    return this->families.size();
+}

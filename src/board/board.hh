@@ -17,7 +17,14 @@ public:
 
     void init_board(int nb_players);
 
-    /* Getter and setters */
+    Brigand *draw(void);
+    bool burn(void) { return this->village->burn(); };
+    bool kill_family(void) { return this->village->kill_family(); };
+    void forward_raiders_to_intruders(void);
+    bool intruders_burn_the_village(void);
+    void restore_graveyard_to_deck(void);
+
+    /* {{{ Getter and setters */
     std::vector<Brigand *> getDeck(void) { return this->deck; };
     void setDeck(std::vector<Brigand *> deck) { this->deck = deck; };
     void addToDeck(Brigand *brigand) { this->deck.push_back(brigand); };
@@ -29,6 +36,7 @@ public:
     void addToGraveyard(Brigand *brigand) { this->graveyard.push_back(brigand); };
     Village *getVillage(void) { return this->village; };
     void setVillage(Village *village) { this->village = village; };
+    /* }}} */
 
 private:
     std::vector<Brigand *> deck;
