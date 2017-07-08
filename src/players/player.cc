@@ -2,11 +2,14 @@
 
 #include <cstddef>
 
+#include "game/player-dead.hh"
+
 Player::Player(void)
     : samurai(NULL),
       defense_hat(NULL),
       defense_farm(NULL),
       defense_family(NULL),
+      wound(false),
       has_passed(false)
 {
 }
@@ -62,18 +65,17 @@ void Player::putInDef(Brigand *brigand)
     }
 }
 
-bool Player::woundSamurai(void)
+void Player::woundSamurai(void)
 {
     if (this->wound) {
         if (!this->samurai->getUnleashMode()) {
-            return false;
+            throw new PlayerDead(this);
         }
         this->wound = false;
         this->samurai = this->samurai->getUnleashMode();
     } else {
         this->wound = true;
     }
-    return true;
 }
 
 std::ostream &Player::print(std::ostream &out)

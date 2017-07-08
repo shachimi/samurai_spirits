@@ -59,22 +59,17 @@ void Board::forward_raiders_to_intruders(void)
 }
 
 /* after call to it intruders go back to the deck */
-bool Board::intruders_burn_the_village(void)
+void Board::intruders_burn_the_village(void)
 {
     while (this->spies.size()) {
         Brigand *intruders = this->spies.top();
 
         this->spies.pop();
         if (intruders->getIsBurning()) {
-            bool has_still_farm = this->village->burn();
-
-            if (!has_still_farm) {
-                return false;
-            }
+            this->village->burn();
         }
         this->deck.push_back(intruders);
     }
-    return true;
 }
 
 void Board::restore_graveyard_to_deck(void)

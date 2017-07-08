@@ -14,8 +14,8 @@ public:
 
     std::ostream &print(std::ostream& out);
 
-    bool burn(void);
-    bool kill_family(void);
+    void burn(void);
+    void kill_family(void);
 
     /* Getter and setters */
     std::vector<Farm *> getFarms(void) const { return this->farms; };

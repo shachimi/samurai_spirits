@@ -31,7 +31,7 @@ public:
     int getCurrentTrack(void);
     void putInDef(Brigand *brigand);
     bool canDefend(Brigand *brigand);
-    bool woundSamurai(void);
+    void woundSamurai(void);
 
     /* }}} */
     /* {{{ Play */

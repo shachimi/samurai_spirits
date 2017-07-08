@@ -18,10 +18,10 @@ public:
     void init_board(int nb_players);
 
     Brigand *draw(void);
-    bool burn(void) { return this->village->burn(); };
-    bool kill_family(void) { return this->village->kill_family(); };
+    void burn(void) { this->village->burn(); };
+    void kill_family(void) { this->village->kill_family(); };
     void forward_raiders_to_intruders(void);
-    bool intruders_burn_the_village(void);
+    void intruders_burn_the_village(void);
     void restore_graveyard_to_deck(void);
 
     /* {{{ Getter and setters */

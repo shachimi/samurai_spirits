@@ -14,7 +14,7 @@ public:
     bool play_round(void);
     bool play_turn(void);
     void play_player_turn(Player *);
-    bool resolve_round_end(void);
+    void resolve_round_end(void);
 
     /* }}} */
     /* {{{ Misc. */

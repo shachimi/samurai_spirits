@@ -1,5 +1,8 @@
 #include "village.hh"
 
+#include "game/farm-burned.hh"
+#include "game/family-killed.hh"
+
 Village::Village(void)
 {
 }
@@ -17,20 +20,24 @@ std::ostream &Village::print(std::ostream &out)
     return out;
 }
 
-bool Village::burn(void)
+void Village::burn(void)
 {
     if (this->barricades > 0) {
         this->barricades--;
-        return true;
+        return;
     }
     this->farms.pop_back();
 
-    return this->farms.size();
+    if (!this->farms.size()) {
+        throw new FarmBurned();
+    }
 }
 
-bool Village::kill_family(void)
+void Village::kill_family(void)
 {
     this->families.pop_back();
 
-    return this->families.size();
+    if (!this->families.size()) {
+        throw new FamilyKilled();
+    }
 }

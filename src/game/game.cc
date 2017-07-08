@@ -3,6 +3,7 @@
 #include <cstddef>
 
 #include "card/brigand.hh"
+#include "game/player-dead.hh"
 
 /* {{{ Singleton */
 
@@ -50,8 +51,8 @@ void Game::init_game(int nb_players)
 
 bool Game::play_round(void)
 {
-    while (this->play_turn() && this->board->getDeck().size()) {
-    }
+        while (this->play_turn() && this->board->getDeck().size()) {
+        }
     return true;
 }
 
@@ -109,7 +110,7 @@ void Game::play_player_turn(Player *player)
     }
 }
 
-bool Game::resolve_round_end(void)
+void Game::resolve_round_end(void)
 {
     this->board->forward_raiders_to_intruders();
 
@@ -118,36 +119,21 @@ bool Game::resolve_round_end(void)
         Player *player = this->players[i];
 
         if (!player->getDefenseHat()) {
-            bool is_alive = player->woundSamurai();
-
-            if (!is_alive) {
-                std::cout << "dead" << std::endl;
-                return false;
-            }
+            player->woundSamurai();
         } else {
             this->board->addToDeck(player->getDefenseHat());
             player->setDefenseHat(NULL);
         }
 
         if (!player->getDefenseFarm()) {
-            bool has_still_farm = this->board->burn();
-
-            if (!has_still_farm) {
-                std::cout << "farm burn" << std::endl;
-                return false;
-            }
+            this->board->burn();
         } else {
             this->board->addToDeck(player->getDefenseFarm());
             player->setDefenseFarm(NULL);
         }
 
         if (!player->getDefenseFamily()) {
-            bool has_still_family = this->board->kill_family();
-
-            if (!has_still_family) {
-                std::cout << "family dead" << std::endl;
-                return false;
-            }
+            this->board->kill_family();
         } else {
             this->board->addToDeck(player->getDefenseFamily());
             player->setDefenseFamily(NULL);
@@ -159,15 +145,11 @@ bool Game::resolve_round_end(void)
         }
     }
 
-    if (!this->board->intruders_burn_the_village()) {
-        std::cout << "intruder burn them all" << std::endl;
-        return false;
-    }
+    this->board->intruders_burn_the_village();
     this->board->restore_graveyard_to_deck();
 
     /* TODO: add brigand depending of round */
     this->round++;
-    return true;
 }
 
 
