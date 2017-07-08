@@ -34,12 +34,12 @@ protected:
     int getCurrentTrack(void);
 
 protected:
-    Brigand * defense_farm;
+    Samurai *samurai;
     // std::vector<Talent *> tokens;
-    Samurai * samurai;
     std::vector<Brigand *> battle_track;
-    Brigand * defense_family;
-    Brigand * defense_hat;
+    Brigand *defense_hat;
+    Brigand *defense_farm;
+    Brigand *defense_family;
 };
 
 #endif /* !PLAYER_HH_ */

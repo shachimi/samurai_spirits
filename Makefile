@@ -1,7 +1,7 @@
 BIN=samurai-spirit
 OBJS=src/board/board.o src/card/brigand.o src/players/player.o    	\
 src/samurai/samurai.o src/village/village.o src/village/farm.o 		\
-src/village/family.o
+src/village/family.o src/game/game.o
 
 LIBS=
 CFLAGS=-Wall -Wextra -Werror

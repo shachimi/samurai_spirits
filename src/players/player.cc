@@ -1,6 +1,12 @@
 #include "player.hh"
 
+#include <cstddef>
+
 Player::Player(void)
+    : samurai(NULL),
+      defense_hat(NULL),
+      defense_farm(NULL),
+      defense_family(NULL)
 {
 }
 

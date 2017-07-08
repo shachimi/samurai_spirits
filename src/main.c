@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "board/board.hh"
 #include "card/brigand.hh"
 #include "players/player.hh"
 #include "samurai/samurai.hh"
