@@ -98,7 +98,17 @@ void Game::play_player_turn(Player *player)
         switch (reaction) {
           case REACTION_FIGHT:
             player->addOnBattleTrack(brigand);
-            /* TODO: check for power and battle gauge */
+            if (player->getCurrentTrack() >
+                player->getSamurai()->getBattleGauge())
+            {
+                this->board->burn();
+            } else
+            if (player->getCurrentTrack() ==
+                player->getSamurai()->getBattleGauge())
+            {
+                this->board->addToGraveyard(player->removeFirstOnTrack());
+                /* TODO: ask if it use its Kiai */
+            }
             break;
           case REACTION_DEFEND:
             player->putInDef(brigand);

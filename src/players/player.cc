@@ -78,6 +78,14 @@ void Player::woundSamurai(void)
     }
 }
 
+Brigand *Player::removeFirstOnTrack(void)
+{
+    Brigand *res = this->battle_track[0];
+
+    this->battle_track.erase(this->battle_track.begin());
+    return res;
+}
+
 std::ostream &Player::print(std::ostream &out)
 {
     out << "Samurai (" << (this->wound ? "Wounded" : "Ok") << ")- "

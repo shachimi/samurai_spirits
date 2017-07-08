@@ -32,6 +32,7 @@ public:
     void putInDef(Brigand *brigand);
     bool canDefend(Brigand *brigand);
     void woundSamurai(void);
+    Brigand *removeFirstOnTrack(void);
 
     /* }}} */
     /* {{{ Play */

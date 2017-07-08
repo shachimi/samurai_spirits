@@ -23,7 +23,7 @@ void Board::init_board(int nb_players)
         village->addToFamilies(new Family());
     }
 
-    for (int i = 0; i < (nb_players * 6); i++) {
+    for (int i = 0; i < (nb_players * 7); i++) {
         Brigand *brigand = new Brigand();
 
         brigand->setSymbol(random() % 4);
