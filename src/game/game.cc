@@ -46,3 +46,16 @@ void Game::init_game(int nb_players)
 }
 
 /* }}} */
+/* {{{ Utils */
+
+std::ostream &Game::print(std::ostream &out)
+{
+    this->board->print(out);
+    for (unsigned int i = 0; i < this->players.size(); i++) {
+        this->players[i]->print(out);
+    }
+
+    return out;
+}
+
+/* }}} */

@@ -9,6 +9,7 @@ public:
     static Game *getInstance(void);
 
     void init_game(int nb_players);
+    std::ostream &print(std::ostream& out);
 
     Board *getBoard(void) { return this->board; };
     void setBoard(Board *board) { this->board = board; };
